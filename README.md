@@ -82,8 +82,10 @@ jupyter notebook
 
 ## Project Roadmap
 
-* [ &nbsp; ] Phase 1: Understand the data sources, features, and business goals for churn prediction
-* [ &nbsp; ] Phase 2: Explore the dataset through EDA (visualizations, statistics, trends)
+- [✅] Phase 1: Understand the data sources, features, and business goals for churn prediction  
+  - Dataset inspection completed (shape, types, missing values)
+  - Initial observations documented
+- [ &nbsp; ] Phase 2: Explore the dataset through EDA (visualizations, statistics, trends)
 * [ &nbsp; ] Phase 3: Clean and preprocess data (handle missing values, outliers, encoding, scaling)
 * [ &nbsp; ] Phase 4: Train baseline and improved machine learning models for churn prediction
 * [ &nbsp; ] Phase 5: Evaluate model performance using appropriate metrics (accuracy, recall, etc.)
