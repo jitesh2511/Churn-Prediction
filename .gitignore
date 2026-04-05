@@ -3,3 +3,7 @@ data/
 
 # Virtual Environments
 .venv/
+
+# pycache
+__pycache__/
+*.pyc

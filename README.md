@@ -26,7 +26,9 @@ churn-prediction/
 ├── data/                  # Directory for datasets (excluded from version control)
 ├── notebooks/             # Jupyter notebooks (EDA and experimentation)
 │
-├── requirements.txt       # Project dependencies
+├── src/                   # Core Python modules for data processing, model training, and saving the trained model
+├── requirements.txt       # Project dependencies (mirrored in pyproject.toml)
+├── pyproject.toml         # Editable install so notebooks can `import src`
 ├── README.md
 ├── LICENSE
 ```
@@ -69,7 +71,7 @@ pip install -r requirements.txt
 ### 3. Prepare your data
 
 - Download the dataset from the link above.
-- Place the CSV file inside the `data/` folder.
+- Place the CSV file inside a `data/` folder in the project root.
 
 ### 4. Run notebooks
 
@@ -90,7 +92,12 @@ jupyter notebook
   - Identified key drivers of churn using visualizations
   - Analyzed relationships between features and target variable
   - Summarized insights to guide preprocessing and modeling
-* [ &nbsp; ] Phase 3: Clean and preprocess data (handle missing values, outliers, encoding, scaling)
+* [x] Phase 3: Clean and preprocess data (handle missing values, outliers, encoding, scaling)
+  - Cleaned and converted the `TotalCharges` column to numeric values, filling missing entries with 0.
+  - Removed the `customerID` column as it is a non-predictive unique identifier.
+  - Transformed all binary "Yes"/"No" columns (including the target `Churn`) into 1/0 binary format.
+  - Applied one-hot encoding to categorical variables for compatibility with machine learning algorithms.
+  - Scaled numerical features to ensure uniformity and improve model performance.
 * [ &nbsp; ] Phase 4: Train baseline and improved machine learning models for churn prediction
 * [ &nbsp; ] Phase 5: Evaluate model performance using appropriate metrics (accuracy, recall, etc.)
 * [ &nbsp; ] Phase 6: Develop an inference pipeline for practical usage of the model
