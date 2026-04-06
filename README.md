@@ -98,8 +98,14 @@ jupyter notebook
   - Transformed all binary "Yes"/"No" columns (including the target `Churn`) into 1/0 binary format.
   - Applied one-hot encoding to categorical variables for compatibility with machine learning algorithms.
   - Scaled numerical features to ensure uniformity and improve model performance.
-* [ &nbsp; ] Phase 4: Train baseline and improved machine learning models for churn prediction
-* [ &nbsp; ] Phase 5: Evaluate model performance using appropriate metrics (accuracy, recall, etc.)
+- [x] Phase 4: Model Building and Evaluation
+  - Trained a baseline Logistic Regression model on the preprocessed dataset
+  - Evaluated performance using classification metrics (accuracy, precision, recall, F1-score)
+  - Achieved a **recall of 0.78**, successfully identifying 78% of customers likely to churn
+  - Demonstrated the impact of class imbalance handling using balanced class weights
+  - Established a strong baseline for further model improvement and tuning
+
+* [ &nbsp; ] Phase 5: Model Improvement & Threshold Tuning
 * [ &nbsp; ] Phase 6: Develop an inference pipeline for practical usage of the model
 * [ &nbsp; ] Phase 7: Create an interactive interface for predictions (Streamlit)
 * [ &nbsp; ] Phase 8: Refactor and organize codebase for clarity and maintainability
