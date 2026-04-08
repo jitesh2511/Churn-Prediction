@@ -7,3 +7,7 @@ data/
 # pycache
 __pycache__/
 *.pyc
+
+# Model
+model/
+*.pkl
