@@ -71,8 +71,7 @@ def preprocess_inf(X : pd.DataFrame) -> pd.DataFrame:
         if col in X.columns:
             X[col] = X[col].map({'Yes': 1, 'No': 0})
 
-    # Converting Categorical to One-Hot Encoding
-    X = pd.get_dummies(X, drop_first=True)
+    X = pd.get_dummies(X)
     X = X.astype(float)
 
     # Align columns with training data

@@ -26,7 +26,7 @@ churn-prediction/
 ├── data/                  # Directory for datasets (excluded from version control)
 ├── notebooks/             # Jupyter notebooks (EDA and experimentation)
 │
-├── src/                   # Core Python modules for data processing, model training, and saving the trained model
+├── src/                   # Core Python modules for cofigurations, data processing and prediction pipeline
 ├── requirements.txt       # Project dependencies (mirrored in pyproject.toml)
 ├── pyproject.toml         # Editable install so notebooks can `import src`
 ├── README.md
@@ -41,7 +41,7 @@ churn-prediction/
 * Pandas, NumPy
 * scikit-learn
 * Matplotlib, Seaborn
-* (Planned) Streamlit for UI
+* Streamlit for UI
 
 ---
 
@@ -71,68 +71,62 @@ pip install -r requirements.txt
 ### 3. Prepare your data
 
 - Download the dataset from the link above.
-- Place the CSV file inside a `data/` folder in the project root.
+- Place the CSV file inside a `data/` directory in the project root
 
-### 4. Run the Streamlit app
+### 4. Train the model
+This step generates the trained model and required artifacts for inference
+Create a `model/` directory in project root if the step fails
+```bash
+python -m src.train
+```
+
+### 5. Run the app
 
 ```bash
 streamlit run app.py
 ```
 
+> Note: Model files are not included in the repository, you must run the training step (Step 4) before using the app
+
+---
+
+## 🔍 Key Highlights
+
+- End-to-end ML pipeline from EDA to deployment  
+- High recall (90%) optimized for business use-case  
+- Explainable predictions with feature-level insights  
+- Interactive UI for real-time inference  
 
 ---
 
 ## Project Roadmap
 
-- [x] Phase 1: Understand the data sources, features, and business goals for churn prediction  
-  - Dataset inspection completed (shape, types, missing values)
-  - Initial observations documented
-- [x] Phase 2: Exploratory Data Analysis (EDA)
-  - Performed univariate and bivariate analysis (distributions, box plots, correlations)
-  - Identified key drivers of churn using visualizations
-  - Analyzed relationships between features and target variable
-  - Summarized insights to guide preprocessing and modeling
-- [x] Phase 3: Clean and preprocess data (handle missing values, outliers, encoding, scaling)
-  - Cleaned and converted the `TotalCharges` column to numeric values, filling missing entries with 0.
-  - Removed the `customerID` column as it is a non-predictive unique identifier.
-  - Transformed all binary "Yes"/"No" columns (including the target `Churn`) into 1/0 binary format.
-  - Applied one-hot encoding to categorical variables for compatibility with machine learning algorithms.
-  - Scaled numerical features to ensure uniformity and improve model performance.
-- [x] Phase 4: Model Building and Evaluation
-  - Trained a baseline Logistic Regression model on the preprocessed dataset
-  - Evaluated performance using classification metrics (accuracy, precision, recall, F1-score)
-  - Achieved a **recall of 0.78**, successfully identifying 78% of customers likely to churn
-  - Demonstrated the impact of class imbalance handling using balanced class weights
-  - Established a strong baseline for further model improvement and tuning
-- [x] Phase 5: Model Improvement & Threshold Tuning
-  - Generated prediction probabilities and analyzed model behavior across different decision thresholds
-  - Tuned classification threshold to optimize recall-precision trade-off
-  - Achieved **90% recall** at threshold = 0.35, significantly improving churn detection
-  - Evaluated model performance using Precision-Recall and ROC curves
-  - Selected optimal threshold based on business objective of maximizing churn detection
-  - Demonstrated understanding of trade-offs between recall and precision in imbalanced classification problems
-- [x] Phase 6: Develop an inference pipeline for practical usage of the model
-  - Refactored model inference into a reusable prediction function
-  - Built an end-to-end pipeline to process raw input data and generate churn predictions
-  - Integrated preprocessing, feature encoding, and scaling with trained model artifacts
-  - Ensured consistency between training and inference by reusing saved scaler and feature schema
-  - Enabled predictions on unseen data by accepting external input files
-  - Returned model outputs (predictions and probabilities) in a format suitable for downstream applications (e.g., UI)
-  - Designed the pipeline to be modular and extensible for future deployment and integration
-- [x] Phase 7: Create an interactive interface for predictions (Streamlit)
-  - Built an interactive web application using Streamlit for real-time churn prediction
-  - Designed user-friendly input interface with key customer features
-  - Integrated trained model and preprocessing pipeline for seamless inference
-  - Implemented dynamic feature handling (e.g., auto-calculation of TotalCharges)
-  - Displayed predictions with probability scores and intuitive visual feedback
-  - Enabled end-to-end flow from user input → preprocessing → prediction → output
-- [x] Phase 8: Refactor and organize codebase for clarity and maintainability
-  - Modularized codebase and removed duplication
-  - Centralized configuration and improved structure
-  - Ensured consistency between training and inference pipelines
+- [x] Phase 1: Data Understanding  
+  - Explored dataset structure, features, and initial insights  
 
-* [ &nbsp; ] Phase 9: Add explainability tools and documentation to interpret model outputs
+- [x] Phase 2: Exploratory Data Analysis  
+  - Identified key patterns and drivers of churn through visual analysis  
 
+- [x] Phase 3: Data Preprocessing  
+  - Cleaned data, encoded categorical features, and applied scaling  
+
+- [x] Phase 4: Model Building  
+  - Trained baseline Logistic Regression model and evaluated performance  
+
+- [x] Phase 5: Model Improvement  
+  - Optimized decision threshold and improved recall to 90%  
+
+- [x] Phase 6: Prediction Pipeline  
+  - Built reusable inference pipeline for processing unseen data  
+
+- [x] Phase 7: Streamlit UI  
+  - Developed interactive web app for real-time churn prediction  
+
+- [x] Phase 8: Code Refactoring  
+  - Modularized codebase and improved maintainability  
+
+- [x] Phase 9: Explainability  
+  - Added global and local interpretation of model predictions    
 ---
 
 ## License

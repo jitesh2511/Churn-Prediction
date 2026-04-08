@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-from src.predict import predict
+from src.predict import predict, imp_factors
 
 # Main Information
 st.title("📊 Customer Churn Prediction")
@@ -27,14 +27,14 @@ partner = st.selectbox('Has Partner?', ['Yes', 'No'])
 
 dependents = st.selectbox('Has Dependents?', ['Yes', 'No'])
 
-internet = st.selectbox('Internet Service', ['DSL', 'Fiber Optic', 'No'])
+internet = st.selectbox('Internet Service', ['DSL', 'Fiber optic', 'No'])
 
 payment = st.selectbox('Payment Method', 
                         [
-                            'Electronic Check', 
-                            'Mailed Check', 
+                            'Electronic check', 
+                            'Mailed check', 
                             'Bank transfer (automatic)', 
-                            'Credit Card (automatic)'
+                            'Credit card (automatic)'
                         ])
 
 tenure = st.number_input("Tenure (months)", min_value=0)
@@ -50,8 +50,21 @@ st.caption('Total Charges is usually Monthly Charges x Tenure')
 
 contract = st.selectbox(
     "Contract Type",
-    ['Month-to-Month', 'One year', 'Two year']
+    ['Month-to-month', 'One year', 'Two year']
 )
+
+options = [
+    'gender',
+    'SeniorCitizen',
+    'Partner',
+    'Dependents',
+    'tenure',
+    'MonthlyCharges',
+    'TotalCharges',
+    'Contract',
+    'InternetService',
+    'PaymentMethod'
+]
 
 input_data = {
         "gender": gender,
@@ -85,4 +98,34 @@ if st.button('Predict'):
     else:
         st.success('Customer is likely to stay')
     
-    st.write(f'**Churn Probability :** {prob:.2f}')
+    st.write(f'**Churn Probability :** {(prob * 100):.2f}%')
+
+    all_features = imp_factors(df)
+
+    # Filter
+    filtered_features = []
+
+    for _, row in all_features.iterrows():
+        for opt in options:
+            if row["Feature"].startswith(opt):
+                filtered_features.append(row)
+                break
+
+    filtered_df = pd.DataFrame(filtered_features)
+
+    if filtered_df.empty:
+        st.write("No strong contributing factors identified for this prediction")
+
+    positive = filtered_df[filtered_df["Contribution"] > 0]
+    negative = filtered_df[filtered_df["Contribution"] < 0]
+
+    if prediction == 'Yes':
+        st.subheader("Why this customer is likely to churn:")
+        for _, row in positive.head(3).iterrows():
+            st.write(f"• {row['Feature'].split('_')[0]} increased the likelihood of churn")
+               
+    else:
+        st.subheader("Why this customer is likely to stay:")
+        c = 0
+        for _, row in negative.head(3).iterrows():
+            st.write(f"• {row['Feature'].split('_')[0]} reduced the likelihood of churn")
