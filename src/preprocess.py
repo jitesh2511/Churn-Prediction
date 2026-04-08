@@ -45,7 +45,8 @@ def preprocess_inf(X : pd.DataFrame) -> pd.DataFrame:
     binary_cols = binary_cols = ['Partner', 'Dependents', 'PhoneService', 'PaperlessBilling']
 
     for col in binary_cols:
-        X[col] = X[col].map({'Yes': 1, 'No': 0})
+        if col in X.columns:
+            X[col] = X[col].map({'Yes': 1, 'No': 0})
 
     # Converting Categorical to One-Hot Encoding
     X = pd.get_dummies(X, drop_first=True)

@@ -6,9 +6,6 @@ from src.config import MODEL_DIR
 from src.config import DATA_PATH
 from src.preprocess import preprocess_inf
 
-def load_data(path):
-    return pd.read_csv(path)
-
 def predict(data):
 
     # Load Model
@@ -37,7 +34,7 @@ def predict(data):
 
 
 
-# yp, ypr = predict(load_data(sys.argv[1]))
+# yp, ypr = predict(pd.read_csv(sys.argv[1]))
 
 # results = pd.DataFrame({
 #     "Churn Prediction": yp,
