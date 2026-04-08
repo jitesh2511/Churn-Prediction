@@ -92,7 +92,7 @@ jupyter notebook
   - Identified key drivers of churn using visualizations
   - Analyzed relationships between features and target variable
   - Summarized insights to guide preprocessing and modeling
-* [x] Phase 3: Clean and preprocess data (handle missing values, outliers, encoding, scaling)
+- [x] Phase 3: Clean and preprocess data (handle missing values, outliers, encoding, scaling)
   - Cleaned and converted the `TotalCharges` column to numeric values, filling missing entries with 0.
   - Removed the `customerID` column as it is a non-predictive unique identifier.
   - Transformed all binary "Yes"/"No" columns (including the target `Churn`) into 1/0 binary format.
@@ -104,8 +104,14 @@ jupyter notebook
   - Achieved a **recall of 0.78**, successfully identifying 78% of customers likely to churn
   - Demonstrated the impact of class imbalance handling using balanced class weights
   - Established a strong baseline for further model improvement and tuning
+- [x] Phase 5: Model Improvement & Threshold Tuning
+  - Generated prediction probabilities and analyzed model behavior across different decision thresholds
+  - Tuned classification threshold to optimize recall-precision trade-off
+  - Achieved **90% recall** at threshold = 0.35, significantly improving churn detection
+  - Evaluated model performance using Precision-Recall and ROC curves
+  - Selected optimal threshold based on business objective of maximizing churn detection
+  - Demonstrated understanding of trade-offs between recall and precision in imbalanced classification problems
 
-* [ &nbsp; ] Phase 5: Model Improvement & Threshold Tuning
 * [ &nbsp; ] Phase 6: Develop an inference pipeline for practical usage of the model
 * [ &nbsp; ] Phase 7: Create an interactive interface for predictions (Streamlit)
 * [ &nbsp; ] Phase 8: Refactor and organize codebase for clarity and maintainability
