@@ -111,8 +111,15 @@ jupyter notebook
   - Evaluated model performance using Precision-Recall and ROC curves
   - Selected optimal threshold based on business objective of maximizing churn detection
   - Demonstrated understanding of trade-offs between recall and precision in imbalanced classification problems
+- [x] Phase 6: Develop an inference pipeline for practical usage of the model
+  - Refactored model inference into a reusable prediction function
+  - Built an end-to-end pipeline to process raw input data and generate churn predictions
+  - Integrated preprocessing, feature encoding, and scaling with trained model artifacts
+  - Ensured consistency between training and inference by reusing saved scaler and feature schema
+  - Enabled predictions on unseen data by accepting external input files
+  - Returned model outputs (predictions and probabilities) in a format suitable for downstream applications (e.g., UI)
+  - Designed the pipeline to be modular and extensible for future deployment and integration
 
-* [ &nbsp; ] Phase 6: Develop an inference pipeline for practical usage of the model
 * [ &nbsp; ] Phase 7: Create an interactive interface for predictions (Streamlit)
 * [ &nbsp; ] Phase 8: Refactor and organize codebase for clarity and maintainability
 * [ &nbsp; ] Phase 9: Add explainability tools and documentation to interpret model outputs
