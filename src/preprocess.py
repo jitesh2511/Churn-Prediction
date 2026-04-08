@@ -1,9 +1,20 @@
 import pandas as pd
-from src.config import MODEL_DIR
+from src.config import MODEL_DIR, NUMERIC_COLS
 import joblib
 
 
 def preprocess(df : pd.DataFrame) -> pd.DataFrame:
+
+    """
+    Preprocess Training Data
+
+    This function performs the following preprocessing steps on the training data:
+    1. Converts the 'TotalCharges' column to numeric and fills missing values with zero.
+    2. Drops the 'customerID' column as it is a unique identifier and not useful for modeling.
+    3. Converts all specified Yes/No columns (binary columns including the target 'Churn') to binary numerical format (1/0).
+    4. Applies one-hot encoding to categorical variables (except the first category to avoid dummy variable trap).
+    5. Ensures all feature columns are of float data type.
+    """
 
     # Handling the TotalCharges column
 
@@ -34,6 +45,18 @@ def preprocess(df : pd.DataFrame) -> pd.DataFrame:
 
 def preprocess_inf(X : pd.DataFrame) -> pd.DataFrame:
 
+    """
+    Preprocess new/unseen data for prediction
+
+    This function preprocesses new/unseen data before making predictions. It performs similar steps as the preprocess() function used for training,
+    such as converting 'TotalCharges' to numeric, binary encoding Yes/No columns, and applying one-hot encoding.
+
+    However, it omits any handling of the target variable 'Churn', since this column is not present in new data.
+    Additionally, after encoding, it aligns the processed features to exactly match the training data columns,
+    filling any missing columns with zeros. It also applies the same scaler used during training to numeric columns,
+    ensuring consistency between training and inference.
+    """
+
     # Handling the TotalCharges column
     X['TotalCharges'] = pd.to_numeric(X['TotalCharges'], errors='coerce')
     X['TotalCharges'] = X['TotalCharges'].fillna(0)
@@ -58,8 +81,7 @@ def preprocess_inf(X : pd.DataFrame) -> pd.DataFrame:
 
     # Scaling the numeric columns
     scaler = joblib.load(MODEL_DIR/"scaler.pkl")
-    numeric_cols = ['tenure', 'MonthlyCharges', 'TotalCharges']
 
-    X.loc[:, numeric_cols] = scaler.transform(X[numeric_cols])
+    X.loc[:, NUMERIC_COLS] = scaler.transform(X[NUMERIC_COLS])
 
     return X

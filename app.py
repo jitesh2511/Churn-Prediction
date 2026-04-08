@@ -1,21 +1,22 @@
 import streamlit as st
 import pandas as pd
-import joblib
 
-from src.config import MODEL_DIR
 from src.predict import predict
 
+# Main Information
 st.title("📊 Customer Churn Prediction")
 
 st.markdown("Enter customer details to predict churn probability.")
 
 st.info("This is a machine learning model prediction and may not be 100% accurate.")
 
-
-st.header("Customer Information")
-
+# Initializing Total Charges field to 0.0
 if 'total_charges' not in st.session_state:
     st.session_state.total_charges = 0.0
+
+
+# Customer Info Section (taking input from user)
+st.header("Customer Information")
 
 gender = st.selectbox("Gender", ['Male', 'Female'])
 
@@ -40,10 +41,12 @@ tenure = st.number_input("Tenure (months)", min_value=0)
 
 monthly_charges = st.number_input("Monthly Charges")
 
+# Making Total Charges field dyanmically equal to tenure * monthly_charges
 st.session_state.total_charges = tenure * monthly_charges
 
 total_charges = st.number_input("Total Charges", value=st.session_state.total_charges)
 st.caption('Total Charges is usually Monthly Charges x Tenure')
+
 
 contract = st.selectbox(
     "Contract Type",
@@ -65,16 +68,11 @@ input_data = {
         "PaymentMethod": payment
     }
 
+
+# On pressing Predict Button
 if st.button('Predict'):
 
     df = pd.DataFrame([input_data])
-
-    required_cols = joblib.load(MODEL_DIR/"model_columns.pkl")
-
-    for col in required_cols:
-        if col not in df.columns:
-            df[col] = 0
-
     y_pred, y_prob = predict(df)
 
     prediction = 'Yes' if y_pred[0] == 1 else 'No'

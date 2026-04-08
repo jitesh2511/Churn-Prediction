@@ -126,8 +126,11 @@ streamlit run app.py
   - Implemented dynamic feature handling (e.g., auto-calculation of TotalCharges)
   - Displayed predictions with probability scores and intuitive visual feedback
   - Enabled end-to-end flow from user input → preprocessing → prediction → output
+- [x] Phase 8: Refactor and organize codebase for clarity and maintainability
+  - Modularized codebase and removed duplication
+  - Centralized configuration and improved structure
+  - Ensured consistency between training and inference pipelines
 
-* [ &nbsp; ] Phase 8: Refactor and organize codebase for clarity and maintainability
 * [ &nbsp; ] Phase 9: Add explainability tools and documentation to interpret model outputs
 
 ---
