@@ -50,7 +50,7 @@ churn-prediction/
 ### 1. Clone the repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/jitesh2511/Churn-Prediction
 cd churn-prediction
 ```
 
@@ -73,10 +73,10 @@ pip install -r requirements.txt
 - Download the dataset from the link above.
 - Place the CSV file inside a `data/` folder in the project root.
 
-### 4. Run notebooks
+### 4. Run the Streamlit app
 
 ```bash
-jupyter notebook
+streamlit run app.py
 ```
 
 
@@ -119,8 +119,14 @@ jupyter notebook
   - Enabled predictions on unseen data by accepting external input files
   - Returned model outputs (predictions and probabilities) in a format suitable for downstream applications (e.g., UI)
   - Designed the pipeline to be modular and extensible for future deployment and integration
+- [x] Phase 7: Create an interactive interface for predictions (Streamlit)
+  - Built an interactive web application using Streamlit for real-time churn prediction
+  - Designed user-friendly input interface with key customer features
+  - Integrated trained model and preprocessing pipeline for seamless inference
+  - Implemented dynamic feature handling (e.g., auto-calculation of TotalCharges)
+  - Displayed predictions with probability scores and intuitive visual feedback
+  - Enabled end-to-end flow from user input → preprocessing → prediction → output
 
-* [ &nbsp; ] Phase 7: Create an interactive interface for predictions (Streamlit)
 * [ &nbsp; ] Phase 8: Refactor and organize codebase for clarity and maintainability
 * [ &nbsp; ] Phase 9: Add explainability tools and documentation to interpret model outputs
 
