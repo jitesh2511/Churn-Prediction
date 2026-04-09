@@ -86,35 +86,33 @@ input_data = {
 if st.button('Predict'):
 
     with st.spinner('Predicting...'):
-        response = requests.post(API_URL + "/predict", json=input_data)
+        try:
+            response = requests.post(API_URL, json=input_data)
+            response.raise_for_status()
+            result = response.json()
+        except Exception as e:
+            st.error(f"Error: {e}")
+            st.stop()
 
-    try:
-        response = requests.post(API_URL, json=input_data)
-        response.raise_for_status()
-        result = response.json()
-    except Exception as e:
-        st.error(f"Error: {e}")
-        st.stop()
+        prediction = result['prediction']
+        probability = result['probability']
+        factors = result['factors']
 
-    prediction = result['prediction']
-    probability = result['probability']
-    factors = result['factors']
+        st.subheader('Prediction Result')
 
-    st.subheader('Prediction Result')
-
-    if prediction == 'Yes':
-        st.error('Customer is likely to churn')
-    else:
-        st.success('Customer is likely to stay')
-    
-    st.write(f'**Churn Probability :** {probability}%')
-
-    if not factors.empty:
         if prediction == 'Yes':
-            st.subheader('Why is this customer likely to churn?')
-            for _, row in factors.iterrows():
-                st.write(f"{row['Feature'].split('_')[0]} increased the likelihood of churn")
+            st.error('Customer is likely to churn')
         else:
-            st.subheader('Why is this customer likely to stay?')
-            for _, row in factors.iterrows():
-                st.write(f"{row['Feature'].split('_')[0]} decreased the likelihood of churn")
+            st.success('Customer is likely to stay')
+        
+        st.write(f'**Churn Probability :** {probability}%')
+
+        if factors:
+            if prediction == 'Yes':
+                st.subheader('Why is this customer likely to churn?')
+                for _, row in factors.iterrows():
+                    st.write(f"{row['Feature'].split('_')[0]} increased the likelihood of churn")
+            else:
+                st.subheader('Why is this customer likely to stay?')
+                for _, row in factors.iterrows():
+                    st.write(f"{row['Feature'].split('_')[0]} decreased the likelihood of churn")
