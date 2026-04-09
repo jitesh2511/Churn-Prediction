@@ -87,7 +87,7 @@ if st.button('Predict'):
 
     with st.spinner('Predicting...'):
         try:
-            response = requests.post(API_URL, json=input_data)
+            response = requests.post(API_URL + '/predict', json=input_data)
             response.raise_for_status()
             result = response.json()
         except Exception as e:
