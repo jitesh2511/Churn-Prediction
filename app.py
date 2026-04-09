@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import pandas as pd
 
 from src.config import API_URL
 
@@ -96,7 +97,7 @@ if st.button('Predict'):
 
         prediction = result['prediction']
         probability = result['probability']
-        factors = result['factors']
+        factors = pd.DataFrame(result['factors'])
 
         st.subheader('Prediction Result')
 
@@ -107,7 +108,7 @@ if st.button('Predict'):
         
         st.write(f'**Churn Probability :** {probability}%')
 
-        if factors:
+        if not factors.empty:
             if prediction == 'Yes':
                 st.subheader('Why is this customer likely to churn?')
                 for _, row in factors.iterrows():
