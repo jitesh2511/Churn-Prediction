@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 import requests
 
 from src.config import API_URL
@@ -89,19 +88,17 @@ if st.button('Predict'):
     with st.spinner('Predicting...'):
         response = requests.post(API_URL + "/predict", json=input_data)
 
-    if response.status_code == 200:
+    try:
+        response = requests.post(API_URL, json=input_data)
+        response.raise_for_status()
         result = response.json()
-
-        prediction = result['prediction']
-        probability = result['probability']
-        factors = pd.DataFrame(result['factors'])
-    
-    else:
-        st.error('API request failed')
+    except Exception as e:
+        st.error(f"Error: {e}")
         st.stop()
 
-
-    # y_pred, y_prob = predict(df)
+    prediction = result['prediction']
+    probability = result['probability']
+    factors = result['factors']
 
     st.subheader('Prediction Result')
 
