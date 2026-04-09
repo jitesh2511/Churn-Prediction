@@ -16,4 +16,4 @@ NUMERIC_COLS = ['tenure', 'MonthlyCharges', 'TotalCharges']
 
 THRESHOLD = 0.35
 
-API_URL = "http://127.0.0.1:8000/predict"
+API_URL = "https://churn-api-1b90.onrender.com"

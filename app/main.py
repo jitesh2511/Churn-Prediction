@@ -72,9 +72,7 @@ def predict_churn(data: CustomerData):
     else:
         factors = negative.head(3)
     factors = factors.reset_index(drop=True)
-    print(factors)
-    print(type(factors))
-
+    
     return {
         'prediction': prediction,
         'probability': probability,
