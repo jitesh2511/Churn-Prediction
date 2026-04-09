@@ -1,10 +1,49 @@
 # Churn Prediction ML Project
 
-This project implements an end-to-end machine learning pipeline to predict customer churn using real-world telecom data.
+This project implements a production-style end-to-end machine learning system to predict customer churn using real-world telecom data.
 
-Customer churn prediction helps businesses identify users who are likely to leave a service, enabling proactive retention strategies and improving long-term revenue.
+The system is designed with a modular architecture:
+- A FastAPI backend serving the ML model as a REST API
+- A Streamlit frontend for interactive user input and visualization
 
-The project covers the complete ML lifecycle — from data analysis and preprocessing to model development, evaluation and explainability — along with an interactive web application for real-time predictions.
+This separation ensures scalability, maintainability, and real-world applicability.
+
+---
+
+## 📸 Demo
+
+### 🔹 Streamlit UI – Input Form
+![UI Input 1](assets/ui_1.png)
+![UI Input 2](assets/ui_2.png)
+
+### 🔹 Streamlit UI – Prediction Result
+![Churn Prediction](assets/output_churn.png)
+![Stay Prediction](assets/output_stay.png)
+
+### 🔹 FastAPI API Docs
+![API](assets/api_docs.png)
+
+---
+
+## 🧠 System Architecture
+
+Streamlit UI → FastAPI Backend → Prediction Pipeline → Trained Model → Response → UI
+
+- **Streamlit** handles user interaction and visualization  
+- **FastAPI** serves as the backend API for predictions  
+- **Prediction Pipeline** processes input data and ensures consistency with training  
+- **Model** generates churn predictions and probabilities  
+
+---
+
+## Tech Stack
+
+* Python
+* Pandas, NumPy
+* scikit-learn
+* Matplotlib, Seaborn
+* FastAPI (Backend API)
+* Streamlit (Frontend UI)
 
 ---
 
@@ -21,27 +60,22 @@ Dataset Link: https://www.kaggle.com/datasets/blastchar/telco-customer-churn
 ```
 churn-prediction/
 │
-├── .venv/                 # Virtual environment for project-specific Python packages (excluded from version control)
-├── data/                  # Directory for datasets (excluded from version control)
-├── model/                 # Directory for storing model and required artifacts (excluded from version control)
+├── app/                  # FastAPI backend
+├── assets/               # Contains screenshots of Demo
+├── src/                  # ML pipeline and preprocessing
+├── notebooks/            # EDA and experimentation
 │
-├── notebooks/             # Jupyter notebooks (EDA and experimentation)
-├── src/                   # Core Python modules for configurations, data processing and prediction pipeline
-├── app.py                 # Streamlit UI for predictions; generates results based on user input using the saved model
+├── data/                 # Dataset (not tracked)
+├── model/                # Saved model artifacts (not tracked)
+├── .venv/                # Virtual environment (not tracked)
+│
+├── app.py                 # Streamlit UI Frontend
 ├── requirements.txt       # Project dependencies
+├── .gitignore
 ├── README.md
 ├── LICENSE
 ```
-
----
-
-## Tech Stack
-
-* Python
-* Pandas, NumPy
-* scikit-learn
-* Matplotlib, Seaborn
-* Streamlit for UI
+> Note: The `data/`, `model/`, and `.venv/` directories are excluded from version control via `.gitignore`.
 
 ---
 
@@ -79,13 +113,30 @@ This step generates the trained model and required artifacts for inference. Crea
 python -m src.train
 ```
 
-### 5. Run the app
+### 5. Run the backend (FastAPI)
+
+```bash
+uvicorn app.main:app --reload
+```
+API will be available at: http://127.0.0.1:8000/docs
+
+### 6. Run the app
 
 ```bash
 streamlit run app.py
 ```
 
 > Note: Model files are not included in the repository, you must run the training step (Step 4) before using the app
+
+---
+
+## 🔍 Key Highlights
+
+- End-to-end ML pipeline from EDA to deployment  
+- High recall (90%) optimized for business use-case  
+- Explainable predictions with feature-level insights  
+- Modular architecture using FastAPI and Streamlit  
+- Decoupled frontend and backend for scalability  
 
 ---
 
@@ -117,25 +168,15 @@ streamlit run app.py
 
 - [x] Phase 9: Explainability  
   - Added global and local interpretation of model predictions    
----
-
-## 🔍 Key Highlights
-
-- End-to-end ML pipeline from EDA to deployment  
-- High recall (90%) optimized for business use-case  
-- Explainable predictions with feature-level insights  
-- Interactive UI for real-time inference  
 
 ---
 
 ## 🚀 Future Improvements
 
-- Deploy the application to a cloud platform (e.g., Streamlit Cloud, AWS, or Render) for public access  
+- Deploy the FastAPI backend and Streamlit frontend to cloud platforms   
 - Experiment with advanced models such as Random Forest, XGBoost, and Gradient Boosting to improve performance  
-- Perform hyperparameter tuning for further optimization  
 - Add model monitoring and logging for tracking performance over time  
 - Improve UI/UX for a more intuitive and polished user experience  
-- Extend the project into a production-ready system with API support
 
 ---
 
