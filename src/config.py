@@ -15,3 +15,5 @@ MODEL_DIR = BASE_DIR / "model"
 NUMERIC_COLS = ['tenure', 'MonthlyCharges', 'TotalCharges']
 
 THRESHOLD = 0.35
+
+API_URL = "http://127.0.0.1:8000/predict"

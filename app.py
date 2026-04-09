@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
+import requests
 
-from src.predict import predict, imp_factors
+from src.config import API_URL
 
 # Main Information
 st.title("📊 Customer Churn Prediction")
@@ -39,12 +40,12 @@ payment = st.selectbox('Payment Method',
 
 tenure = st.number_input("Tenure (months)", min_value=0)
 
-monthly_charges = st.number_input("Monthly Charges")
+monthly_charges = st.number_input("Monthly Charges [USD]")
 
 # Making Total Charges field dyanmically equal to tenure * monthly_charges
 st.session_state.total_charges = tenure * monthly_charges
 
-total_charges = st.number_input("Total Charges", value=st.session_state.total_charges)
+total_charges = st.number_input("Total Charges [USD]", value=st.session_state.total_charges)
 st.caption('Total Charges is usually Monthly Charges x Tenure')
 
 
@@ -85,11 +86,22 @@ input_data = {
 # On pressing Predict Button
 if st.button('Predict'):
 
-    df = pd.DataFrame([input_data])
-    y_pred, y_prob = predict(df)
+    with st.spinner('Predicting...'):
+        response = requests.post(API_URL, json=input_data)
 
-    prediction = 'Yes' if y_pred[0] == 1 else 'No'
-    prob = round(y_prob[0], 3)
+    if response.status_code == 200:
+        result = response.json()
+
+        prediction = result['prediction']
+        probability = result['probability']
+        factors = pd.DataFrame(result['factors'])
+    
+    else:
+        st.error('API request failed')
+        st.stop()
+
+
+    # y_pred, y_prob = predict(df)
 
     st.subheader('Prediction Result')
 
@@ -98,34 +110,14 @@ if st.button('Predict'):
     else:
         st.success('Customer is likely to stay')
     
-    st.write(f'**Churn Probability :** {(prob * 100):.2f}%')
+    st.write(f'**Churn Probability :** {probability}%')
 
-    all_features = imp_factors(df)
-
-    # Filter
-    filtered_features = []
-
-    for _, row in all_features.iterrows():
-        for opt in options:
-            if row["Feature"].startswith(opt):
-                filtered_features.append(row)
-                break
-
-    filtered_df = pd.DataFrame(filtered_features)
-
-    if filtered_df.empty:
-        st.write("No strong contributing factors identified for this prediction")
-
-    positive = filtered_df[filtered_df["Contribution"] > 0]
-    negative = filtered_df[filtered_df["Contribution"] < 0]
-
-    if prediction == 'Yes':
-        st.subheader("Why this customer is likely to churn:")
-        for _, row in positive.head(3).iterrows():
-            st.write(f"• {row['Feature'].split('_')[0]} increased the likelihood of churn")
-               
-    else:
-        st.subheader("Why this customer is likely to stay:")
-        c = 0
-        for _, row in negative.head(3).iterrows():
-            st.write(f"• {row['Feature'].split('_')[0]} reduced the likelihood of churn")
+    if not factors.empty:
+        if prediction == 'Yes':
+            st.subheader('Why is this customer likely to churn?')
+            for _, row in factors.iterrows():
+                st.write(f'{row['Feature'].split('_')[0]} increased the likelihood of churn')
+        else:
+            st.subheader('Why is this customer likely to stay?')
+            for _, row in factors.iterrows():
+                st.write(f'{row['Feature'].split('_')[0]} decreased the likelihood of churn')
