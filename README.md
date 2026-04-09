@@ -10,6 +10,13 @@ This separation ensures scalability, maintainability, and real-world applicabili
 
 ---
 
+## 🌍 Live Demo
+
+- 🔗 Frontend: https://churn-prediction-jitesh2511.streamlit.app  
+- 🔗 API Docs: https://churn-api-1b90.onrender.com/docs
+
+---
+
 ## 📸 Demo
 
 ### 🔹 Streamlit UI – Input Form
@@ -64,9 +71,9 @@ churn-prediction/
 ├── assets/               # Contains screenshots of Demo
 ├── src/                  # ML pipeline and preprocessing
 ├── notebooks/            # EDA and experimentation
+├── model/                # Saved model artifacts
 │
 ├── data/                 # Dataset (not tracked)
-├── model/                # Saved model artifacts (not tracked)
 ├── .venv/                # Virtual environment (not tracked)
 │
 ├── app.py                 # Streamlit UI Frontend
@@ -75,7 +82,7 @@ churn-prediction/
 ├── README.md
 ├── LICENSE
 ```
-> Note: The `data/`, `model/`, and `.venv/` directories are excluded from version control via `.gitignore`.
+> Note: The `data/` and `.venv/` directories are excluded from version control via `.gitignore`.
 
 ---
 
@@ -108,7 +115,7 @@ pip install -r requirements.txt
 - Place the CSV file inside a `data/` directory in the project root
 
 ### 4. Train the model
-This step generates the trained model and required artifacts for inference. Create a `model/` directory in project root if the step fails
+This step generates the trained model and required artifacts for inference
 ```bash
 python -m src.train
 ```
@@ -125,8 +132,6 @@ API will be available at: http://127.0.0.1:8000/docs
 ```bash
 streamlit run app.py
 ```
-
-> Note: Model files are not included in the repository, you must run the training step (Step 4) before using the app
 
 ---
 
@@ -173,10 +178,18 @@ streamlit run app.py
 
 ## 🚀 Future Improvements
 
-- Deploy the FastAPI backend and Streamlit frontend to cloud platforms   
+- Improve system scalability and performance
 - Experiment with advanced models such as Random Forest, XGBoost, and Gradient Boosting to improve performance  
 - Add model monitoring and logging for tracking performance over time  
 - Improve UI/UX for a more intuitive and polished user experience  
+
+---
+
+## ⚠️ Known Limitations
+
+- Model trained on static dataset
+- No real-time data updates
+- Cold start delay due to free-tier deployment
 
 ---
 

@@ -1,10 +1,22 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import pandas as pd
+from contextlib import asynccontextmanager
+import logging
 
-from src.predict import predict, imp_factors
+from app.services import run_prediction
 
-app = FastAPI(title='Churn Prediction API')
+@asynccontextmanager
+async def lifespan(app):
+    logging.info("🚀 API starting up...")
+    yield
+    logging.info("🛑 API shutting down...")
+
+app = FastAPI(title='Churn Prediction API',lifespan=lifespan)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 class CustomerData(BaseModel):
     gender: str
@@ -23,58 +35,55 @@ class CustomerData(BaseModel):
 def home():
     return {'message':'Churn Prediction API is running'}
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 @app.post('/predict')
 def predict_churn(data: CustomerData):
 
-    input_data = {
-        'gender': data.gender,
-        'SeniorCitizen': data.SeniorCitizen,
-        'Partner': data.Partner,
-        'Dependents': data.Dependents,
-        'tenure': data.tenure,
-        'MonthlyCharges': data.MonthlyCharges,
-        'TotalCharges': data.TotalCharges,
-        'Contract': data.Contract,
-        'InternetService': data.InternetService,
-        'PaymentMethod': data.PaymentMethod
-    }
+    try:
+        logging.info(f"Received request: {data}")
 
-    df = pd.DataFrame([input_data])
+        # 🔹 Validation
+        if data.tenure < 0:
+            logging.warning("Invalid input: Negative tenure")
+            raise HTTPException(status_code=400, detail="Tenure cannot be negative")
 
-    y_pred, y_prob = predict(df)
+        if data.MonthlyCharges < 0:
+            logging.warning("Invalid input: Negative MonthlyCharges")
+            raise HTTPException(status_code=400, detail="Monthly Charges cannot be negative")
 
-    prediction = 'Yes' if y_pred[0] == 1 else 'No'
-    probability = float(round(y_prob[0] * 100, 1))
+        if data.TotalCharges < 0:
+            logging.warning("Invalid input: Negative TotalCharges")
+            raise HTTPException(status_code=400, detail="Total Charges cannot be negative")
 
-    all_features = imp_factors(df)
+        # 🔹 Input preparation
+        input_data = {
+            'gender': data.gender,
+            'SeniorCitizen': data.SeniorCitizen,
+            'Partner': data.Partner,
+            'Dependents': data.Dependents,
+            'tenure': data.tenure,
+            'MonthlyCharges': data.MonthlyCharges,
+            'TotalCharges': data.TotalCharges,
+            'Contract': data.Contract,
+            'InternetService': data.InternetService,
+            'PaymentMethod': data.PaymentMethod
+        }
 
-    # Filter
-    filtered_features = []
-    options = list(input_data.keys())
+        logging.info(f"Processed input: {input_data}")
 
-    for _, row in all_features.iterrows():
-        for opt in options:
-            if row["Feature"].startswith(opt):
-                filtered_features.append(row)
-                break
+        # 🔹 Prediction
+        result = run_prediction(input_data)
 
-    filtered_df = pd.DataFrame(filtered_features)
+        logging.info(f"Prediction result: {result}")
 
-    if filtered_df.empty:
-        factors = pd.DataFrame({})
+        return result
 
-    positive = filtered_df[filtered_df["Contribution"] > 0]
-    negative = filtered_df[filtered_df["Contribution"] < 0]
+    except HTTPException as e:
+        raise e
 
-    if prediction == 'Yes':
-        factors = positive.head(3)
-               
-    else:
-        factors = negative.head(3)
-    factors = factors.reset_index(drop=True)
-    
-    return {
-        'prediction': prediction,
-        'probability': probability,
-        'factors': factors
-    }
+    except Exception as e:
+        logging.error(f"Error in /predict: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
